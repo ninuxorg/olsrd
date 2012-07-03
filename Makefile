@@ -170,7 +170,7 @@ rpm:
 
 # This is quite ugly but at least it works
 ifeq ($(OS),linux)
-SUBDIRS = arprefresh bmf dot_draw dyn_gw dyn_gw_plain httpinfo jsoninfo mdns mini nameservice p2pd pgraph pud quagga secure sgwdynspeed tas txtinfo watchdog
+SUBDIRS = arprefresh bmf dot_draw dyn_gw dyn_gw_plain httpinfo jsoninfo mdns mini nameservice p2pd pgraph pud quagga secure sgwdynspeed tas txtinfo watchdog whna
 else
 ifeq ($(OS),win32)
 SUBDIRS := dot_draw httpinfo jsoninfo mini pgraph secure txtinfo
@@ -425,6 +425,17 @@ watchdog_install:
 watchdog_uninstall:
 		@$(MAKECMD) -C lib/watchdog DESTDIR=$(DESTDIR) uninstall
 
+whna:
+		@$(MAKECMD) -C lib/whna
+
+whna_clean:
+		@$(MAKECMD) -C lib/whna DESTDIR=$(DESTDIR) clean
+
+whna_install:
+		@$(MAKECMD) -C lib/whna DESTDIR=$(DESTDIR) install
+
+whna_uninstall:
+		@$(MAKECMD) -C lib/whna DESTDIR=$(DESTDIR) uninstall
 
 build_all:	all switch libs
 install_all:	install install_libs
