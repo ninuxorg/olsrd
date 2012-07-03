@@ -44,5 +44,5 @@ LoadPlugin "olsrd_whna.so.0.1"
 === Contact ===
 
  * Implemetation by Claudio Pisa <clauz@ninux.org>
- * Original idea by Saverio Proto <zioproto@ninux.org>
+ * Original idea by Saverio Proto <zioproto@gmail.com>
 
