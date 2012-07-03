@@ -379,7 +379,7 @@ IpcConnect
 
 LoadPlugin "olsrd_whna.so.0.1"
 {
-	PlParam "Whna4" "10.255.255.0 255.255.255.0"
+	PlParam "WHna4" "10.255.255.0 255.255.255.0"
 	PlParam "WHnaTargetETX" "1.8"
 	#PlParam "WHnaFakeNodeAddress" "172.22.222.222"
 	#PlParam "WHnaFakeNodeAddress" "10.220.22.222"

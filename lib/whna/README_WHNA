@@ -35,7 +35,7 @@ Internal packet injection is employed to achieve the goal.
 
 LoadPlugin "olsrd_whna.so.0.1"
 {
-	PlParam "Whna4" "10.255.255.0 255.255.255.0"
+	PlParam "WHna4" "10.255.255.0 255.255.255.0"
 	PlParam "WHnaTargetETX" "1.8"
 	PlParam "WHnaFakeNodeAddress" "192.168.101.222"
 }
