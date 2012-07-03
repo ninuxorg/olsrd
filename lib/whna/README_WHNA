@@ -1,0 +1,48 @@
+= OLSR Weighted HNA plugin =
+
+Last update 03/07/2012
+
+== Description ==
+
+The aim of this plugin is to allow the announcement of HNA networks with an 
+attached target ETX weight/metric. 
+
+To preserve compatibility with legacy nodes, this is achieved by using a fake, 
+nonexistent attached node which announces the specified HNA. The metric 
+between the current node and the fake node is the target ETX.
+
+
++---+           _____                     +---+        +---+    _____
+| N |---Tetx---<_HNA_>         ==>        | N |--Tetx--| F |---<_HNA_>
++---+                                     +---+        +---+
+
+N = current node                     To reach the goal of announcing HNA with 
+F = fake node                        weight Tetx, a fake node F connected to N 
+Tetx = target ETX                    with metric Tetx is introduced
+HNA = announced HNA
+
+
+Internal packet injection is employed to achieve the goal.
+
+
+== Status ==
+
+ - the plugin works only for IPv4 and can announce only a single HNA network
+ - the target HNA route is not injected into the routing table
+
+
+== Configuration ==
+
+LoadPlugin "olsrd_whna.so.0.1"
+{
+	PlParam "Whna4" "10.255.255.0 255.255.255.0"
+	PlParam "WHnaTargetETX" "1.8"
+	PlParam "WHnaFakeNodeAddress" "192.168.101.222"
+}
+
+
+=== Contact ===
+
+ * Implemetation by Claudio Pisa <clauz@ninux.org>
+ * Original idea by Saverio Proto <zioproto@ninux.org>
+
