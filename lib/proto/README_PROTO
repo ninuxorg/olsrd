@@ -1,0 +1,16 @@
+= OLSR proto plugin =
+
+take lines from the routing table corresponding to a given protocol and
+redistribute them as HNAs inside OLSRd.
+
+= Configuration =
+
+LoadPlugin "olsrd_proto.so.0.1"
+{
+	PlParam "proto_no" "111"
+}
+
+=== Contact ===
+
+ * Claudio Pisa <clauz@ninux.org>
+
