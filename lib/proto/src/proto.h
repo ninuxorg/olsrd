@@ -53,7 +53,10 @@
 
 /* System includes */
 #include <arpa/inet.h>
+#include <linux/netlink.h>
 #include <linux/rtnetlink.h>
+#include <sys/socket.h>
+#include <unistd.h>
 
 /* OLSR includes */
 #include "olsr_types.h"         
@@ -66,8 +69,12 @@
 #include "olsr_protocol.h"
 #include "parser.h"
 
-
 extern int target_proto_no;
+extern int sock;
+extern struct sockaddr_nl nladdr;
+
+#define ERR_RET(x) do { perror(x); return; } while (0);
+#define BUFFER_SIZE 4095
 
 void proto_inject_hnas(void *foo);
 

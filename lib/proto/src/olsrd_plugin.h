@@ -37,6 +37,8 @@
 #ifndef _OLSRD_PLUGIN_PROTO
 #define _OLSRD_PLUGIN_PROTO
 
+#include <unistd.h>
+
 /****************************************************************************
  *                Functions that the plugin MUST provide                    *
  ****************************************************************************/

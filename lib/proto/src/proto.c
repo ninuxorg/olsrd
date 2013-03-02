@@ -41,23 +41,106 @@
 
 #include "proto.h"
 
-int target_proto_no = 111;
+int target_proto_no = 3;
+int sock = -1;
+struct sockaddr_nl nladdr;
 
 void
 proto_inject_hnas (void *foo __attribute__ ((unused)))
 {
-	struct interface *ifp = ifnet;
 	union olsr_ip_addr proto_hna4_addr;
-	union olsr_ip_addr proto_hna4_netmask;
 	uint8_t proto_hna4_netmask_length;
+
+	int     received_bytes = 0;
+    struct  nlmsghdr *nlh;
+    char    destination_address[32];
+    unsigned char    route_protocol = 0;
+    char    gateway_address[32];
+    struct  rtmsg *route_entry;  /* This struct represent a route entry \
+                                    in the routing table */
+    struct  rtattr *route_attribute; /* This struct contain route \
+                                            attributes (route type) */
+    int     route_attribute_len = 0;
+    char    buffer[BUFFER_SIZE];
 
 	olsr_printf(2, "*** PROTO: printed this!!\n");
 
-	proto_hna4_addr.v4.s_addr = htonl(0xac1f1f00);
-	proto_hna4_netmask_length = 24;
+    bzero(destination_address, sizeof(destination_address));
+    bzero(gateway_address, sizeof(gateway_address));
+    bzero(buffer, sizeof(buffer));
 
-	ip_prefix_list_add(&olsr_cnf->hna_entries, &proto_hna4_addr, proto_hna4_netmask_length);
-	//ip_prefix_list_remove(&olsr_cnf->hna_entries, &proto_hna4_addr, proto_hna4_netmask_length);
+    /* Receiving netlink socket data */
+    while (1)
+    {
+        received_bytes = recv(sock, buffer, sizeof(buffer), 0);
+        if (received_bytes < 0)
+            ERR_RET("recv");
+        /* cast the received buffer */
+        nlh = (struct nlmsghdr *) buffer;
+        /* If we received all data ---> break */
+        if (nlh->nlmsg_type == NLMSG_DONE)
+            break;
+        /* We are just interested in Routing information */
+        if (nladdr.nl_groups == RTMGRP_IPV4_ROUTE)
+            break;
+    }
+
+    /* Reading netlink socket data */
+    /* Loop through all entries */
+    for ( ; NLMSG_OK(nlh, (unsigned int)received_bytes); \
+                    nlh = NLMSG_NEXT(nlh, received_bytes))
+    {
+        /* Get the route data */
+        route_entry = (struct rtmsg *) NLMSG_DATA(nlh);
+
+        /* We are just intrested in main routing table */
+		/*
+        if (route_entry->rtm_table != RT_TABLE_MAIN)
+            continue;
+		*/
+
+        if (route_entry->rtm_protocol != target_proto_no)
+            continue;
+
+		proto_hna4_netmask_length = (uint8_t)route_entry->rtm_dst_len;
+		route_protocol = route_entry->rtm_protocol;
+
+        /* Get attributes of route_entry */
+        route_attribute = (struct rtattr *) RTM_RTA(route_entry);
+
+        /* Get the route atttibutes len */
+        route_attribute_len = RTM_PAYLOAD(nlh);
+        /* Loop through all attributes */
+        for ( ; RTA_OK(route_attribute, route_attribute_len); \
+            route_attribute = RTA_NEXT(route_attribute, route_attribute_len))
+        {
+            /* Get the destination address */
+            if (route_attribute->rta_type == RTA_DST)
+            {
+                inet_ntop(AF_INET, RTA_DATA(route_attribute), \
+                        destination_address, sizeof(destination_address));
+				memcpy(&proto_hna4_addr.v4.s_addr, RTA_DATA(route_attribute), sizeof(proto_hna4_addr.v4.s_addr));
+            }
+            /* Get the gateway (Next hop) */
+            if (route_attribute->rta_type == RTA_GATEWAY)
+                inet_ntop(AF_INET, RTA_DATA(route_attribute), \
+                        gateway_address, sizeof(gateway_address));
+        }
+
+        /* Now we can dump the routing attributes */
+        if (nlh->nlmsg_type == RTM_DELROUTE)
+		{
+            olsr_printf(5, "Deleting HNA: %s/%d proto %d gateway %s\n", \
+                destination_address, proto_hna4_netmask_length, route_protocol, gateway_address);
+			ip_prefix_list_remove(&olsr_cnf->hna_entries, &proto_hna4_addr, proto_hna4_netmask_length);
+		}
+        if (nlh->nlmsg_type == RTM_NEWROUTE)
+		{
+            printf("Adding HNA: %s/%d proto %d and gateway %s\n", \
+				destination_address, proto_hna4_netmask_length, route_protocol, gateway_address);
+			ip_prefix_list_add(&olsr_cnf->hna_entries, &proto_hna4_addr, proto_hna4_netmask_length);
+		}
+    }
 
 	return;
 

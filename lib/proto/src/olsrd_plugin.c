@@ -95,11 +95,30 @@ olsrd_get_plugin_parameters(const struct olsrd_plugin_parameters **params, int *
 int
 olsrd_plugin_init(void)
 {
+
   printf("*** PROTO: plugin_init\n");
 
   /* call a function from main olsrd */
   olsr_printf(2, "*** PROTO: printed this with olsr_printf\n");
-  
+
+  /* Zeroing nladdr */
+  bzero (&nladdr, sizeof(nladdr));
+
+  if ((sock = socket(AF_NETLINK, SOCK_RAW, NETLINK_ROUTE)) < 0)
+  {
+	 olsr_printf(1, "*** PROTO: problem initializing netlink socket\n");
+	 return 0;
+  }
+
+  nladdr.nl_family = AF_NETLINK;
+  nladdr.nl_groups = RTMGRP_IPV4_ROUTE;
+
+  if (bind(sock,(struct sockaddr *)&nladdr,sizeof(nladdr)) < 0)
+  {
+	 olsr_printf(1, "*** PROTO: problem binding socket\n");
+	 return 0;
+  }
+
   olsr_start_timer(2*ifnet->hello_etime, 0, OLSR_TIMER_PERIODIC, &proto_inject_hnas, NULL, 0);
 
   return 1;
@@ -130,6 +149,9 @@ static void
 my_fini(void)
 {
   printf("*** PROTO: destructor\n");
+
+  /* Close socket */
+  close(sock);
 }
 
 /*
