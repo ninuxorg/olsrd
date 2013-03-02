@@ -119,7 +119,7 @@ olsrd_plugin_init(void)
 	 return 0;
   }
 
-  olsr_start_timer(2*ifnet->hello_etime, 0, OLSR_TIMER_PERIODIC, &proto_inject_hnas, NULL, 0);
+  add_olsr_socket(sock, &proto_inject_hnas, NULL, NULL, SP_PR_READ);
 
   return 1;
 }

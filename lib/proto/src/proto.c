@@ -46,7 +46,7 @@ int sock = -1;
 struct sockaddr_nl nladdr;
 
 void
-proto_inject_hnas (void *foo __attribute__ ((unused)))
+proto_inject_hnas (int fd, void *data __attribute__ ((unused)), unsigned int flags __attribute__ ((unused)))
 {
 	union olsr_ip_addr proto_hna4_addr;
 	uint8_t proto_hna4_netmask_length;
@@ -130,13 +130,13 @@ proto_inject_hnas (void *foo __attribute__ ((unused)))
         /* Now we can dump the routing attributes */
         if (nlh->nlmsg_type == RTM_DELROUTE)
 		{
-            olsr_printf(5, "Deleting HNA: %s/%d proto %d gateway %s\n", \
+            olsr_printf(5, "*** PROTO: Deleting HNA: %s/%d proto %d gateway %s\n", \
                 destination_address, proto_hna4_netmask_length, route_protocol, gateway_address);
 			ip_prefix_list_remove(&olsr_cnf->hna_entries, &proto_hna4_addr, proto_hna4_netmask_length);
 		}
         if (nlh->nlmsg_type == RTM_NEWROUTE)
 		{
-            printf("Adding HNA: %s/%d proto %d and gateway %s\n", \
+            printf("*** PROTO: Adding HNA: %s/%d proto %d and gateway %s\n", \
 				destination_address, proto_hna4_netmask_length, route_protocol, gateway_address);
 			ip_prefix_list_add(&olsr_cnf->hna_entries, &proto_hna4_addr, proto_hna4_netmask_length);
 		}

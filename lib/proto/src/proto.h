@@ -76,7 +76,7 @@ extern struct sockaddr_nl nladdr;
 #define ERR_RET(x) do { perror(x); return; } while (0);
 #define BUFFER_SIZE 4095
 
-void proto_inject_hnas(void *foo);
+void proto_inject_hnas (int fd, void *data, unsigned int flags);
 
 #endif
 
