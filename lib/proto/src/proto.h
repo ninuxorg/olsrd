@@ -45,7 +45,7 @@
 
 #define PLUGIN_NAME "OLSRD Weighted HNA plugin"
 #define PLUGIN_NAME_SHORT "OLSRD WHNA"
-#define PLUGIN_VERSION "0.0.1 (" __DATE__ " " __TIME__ ")"
+#define PLUGIN_VERSION "0.0.2 (" __DATE__ " " __TIME__ ")"
 #define PLUGIN_COPYRIGHT "  (C) Ninux.org"
 #define PLUGIN_AUTHOR "  Claudio Pisa (clauz@ninux.org)"
 #define MOD_DESC PLUGIN_NAME " " PLUGIN_VERSION "\n" PLUGIN_COPYRIGHT "\n" PLUGIN_AUTHOR
