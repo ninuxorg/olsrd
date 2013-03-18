@@ -50,6 +50,7 @@
 
 
 int set_plugin_proto(const char *proto_no, void *data, set_plugin_parameter_addon addon);
+int set_plugin_table(const char *table_no, void *data, set_plugin_parameter_addon addon);
 
 /****************************************************************************
  *                Functions that the plugin MUST provide                    *
@@ -105,6 +106,9 @@ olsrd_plugin_init(void)
 {
 
   printf("*** PROTO: plugin_init\n");
+
+  /* retrieve existing routes matching protocol and table numbers */
+  existing_routes_hna_injection();
 
   /* Zeroing nladdr */
   bzero (&nladdr, sizeof(nladdr));

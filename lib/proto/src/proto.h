@@ -75,9 +75,15 @@ extern int sock;
 extern struct sockaddr_nl nladdr;
 
 #define ERR_RET(x) do { perror(x); return; } while (0);
-#define BUFFER_SIZE 4095
+#define BUFFER_SIZE 8192
+
+struct nl_req_s {
+  struct nlmsghdr hdr;
+  struct rtgenmsg gen;
+};
 
 void proto_inject_hnas (int fd, void *data, unsigned int flags);
+void existing_routes_hna_injection (void);
 
 #endif
 
