@@ -50,6 +50,7 @@
 
 
 int set_plugin_proto(const char *proto_no, void *data, set_plugin_parameter_addon addon);
+int set_plugin_table(const char *table_no, void *data, set_plugin_parameter_addon addon);
 
 /****************************************************************************
  *                Functions that the plugin MUST provide                    *
@@ -123,6 +124,9 @@ olsrd_plugin_init(void)
 	 olsr_printf(1, "*** PROTO: problem binding socket\n");
 	 return 0;
   }
+
+  /* retrieve existing routes matching protocol and table numbers */
+  existing_routes_hna_injection(sock);
 
   add_olsr_socket(sock, &proto_inject_hnas, NULL, NULL, SP_PR_READ);
 
