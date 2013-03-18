@@ -106,9 +106,6 @@ olsrd_plugin_init(void)
 
   printf("*** PROTO: plugin_init\n");
 
-  /* call a function from main olsrd */
-  olsr_printf(2, "*** PROTO: printed this with olsr_printf\n");
-
   /* Zeroing nladdr */
   bzero (&nladdr, sizeof(nladdr));
 
@@ -147,7 +144,7 @@ static void my_fini(void) __attribute__ ((destructor));
 static void
 my_init(void)
 {
-  printf("%s\n", MOD_DESC);
+  olsr_printf(7, "%s\n", MOD_DESC);
 }
 
 /**
@@ -156,7 +153,7 @@ my_init(void)
 static void
 my_fini(void)
 {
-  printf("*** PROTO: destructor\n");
+  olsr_printf(7, "*** PROTO: destructor\n");
 
   /* Close socket */
   close(sock);

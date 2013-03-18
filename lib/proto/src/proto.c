@@ -64,7 +64,7 @@ proto_inject_hnas (int fd, void *data __attribute__ ((unused)), unsigned int fla
     int     route_attribute_len = 0;
     char    buffer[BUFFER_SIZE];
 
-	olsr_printf(2, "*** PROTO: printed this!!\n");
+	olsr_printf(7, "*** PROTO: inject HNAs function\n");
 
     bzero(destination_address, sizeof(destination_address));
     bzero(gateway_address, sizeof(gateway_address));
@@ -129,13 +129,13 @@ proto_inject_hnas (int fd, void *data __attribute__ ((unused)), unsigned int fla
         /* Now we can dump the routing attributes */
         if (nlh->nlmsg_type == RTM_DELROUTE)
 		{
-            olsr_printf(5, "*** PROTO: Deleting HNA: %s/%d proto %d gateway %s\n", \
+            olsr_printf(3, "*** PROTO: Deleting HNA: %s/%d proto %d gateway %s\n", \
                 destination_address, proto_hna4_netmask_length, route_protocol, gateway_address);
 			ip_prefix_list_remove(&olsr_cnf->hna_entries, &proto_hna4_addr, proto_hna4_netmask_length);
 		}
         if (nlh->nlmsg_type == RTM_NEWROUTE)
 		{
-            printf("*** PROTO: Adding HNA: %s/%d proto %d and gateway %s\n", \
+            olsr_printf(3, "*** PROTO: Adding HNA: %s/%d proto %d and gateway %s\n", \
 				destination_address, proto_hna4_netmask_length, route_protocol, gateway_address);
 			ip_prefix_list_add(&olsr_cnf->hna_entries, &proto_hna4_addr, proto_hna4_netmask_length);
 		}
