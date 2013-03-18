@@ -72,12 +72,20 @@ set_plugin_proto(const char *proto_no, void *data __attribute__ ((unused)), set_
 		return 0;
 }
 
+int
+set_plugin_table(const char *table_no, void *data __attribute__ ((unused)), set_plugin_parameter_addon addon __attribute__ ((unused)))
+{
+		target_table_no = atoi(table_no);
+		return 0;
+}
+
 /**
  * Register parameters from config file
  * Called for all plugin parameters
  */
 static const struct olsrd_plugin_parameters plugin_parameters[] = {
   {.name = "proto_no",.set_plugin_parameter = &set_plugin_proto,.data = NULL},
+  {.name = "table_no",.set_plugin_parameter = &set_plugin_table,.data = NULL},
 };
 
 void

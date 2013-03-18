@@ -5,12 +5,14 @@ redistribute them as HNAs inside OLSRd.
 
 = Configuration =
 
-LoadPlugin "olsrd_proto.so.0.1"
+LoadPlugin "olsrd_proto.so.0.2"
 {
 	PlParam "proto_no" "111"
+	PlParam "table_no" "254"
 }
 
 === Contact ===
 
  * Claudio Pisa <clauz@ninux.org>
+ * contatti@ninux.org
 
