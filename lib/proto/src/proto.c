@@ -42,6 +42,7 @@
 #include "proto.h"
 
 int target_proto_no = 3;
+int target_table_no = -1;
 int sock = -1;
 struct sockaddr_nl nladdr;
 
@@ -93,11 +94,9 @@ proto_inject_hnas (int fd, void *data __attribute__ ((unused)), unsigned int fla
         /* Get the route data */
         route_entry = (struct rtmsg *) NLMSG_DATA(nlh);
 
-        /* We are just intrested in main routing table */
-		/*
-        if (route_entry->rtm_table != RT_TABLE_MAIN)
+        /* If we are just interested in one routing table */
+        if (target_table_no >= 0 && route_entry->rtm_table != target_table_no)
             continue;
-		*/
 
         if (route_entry->rtm_protocol != target_proto_no)
             continue;

@@ -70,6 +70,7 @@
 #include "parser.h"
 
 extern int target_proto_no;
+extern int target_table_no;
 extern int sock;
 extern struct sockaddr_nl nladdr;
 
