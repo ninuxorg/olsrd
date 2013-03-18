@@ -1,7 +1,7 @@
 /*
- * OLSRd weighted HNA plugin
+ * OLSRd proto plugin
  *
- * Copyright (c) 2012 Claudio Pisa <clauz@ninux.org>
+ * Copyright (c) 2013 Claudio Pisa <clauz@ninux.org>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -40,11 +40,11 @@
  */
 
 
-#ifndef _WHNA_H
-#define _WHNA_H
+#ifndef _PROTO_H
+#define _PROTO_H
 
-#define PLUGIN_NAME "OLSRD Weighted HNA plugin"
-#define PLUGIN_NAME_SHORT "OLSRD WHNA"
+#define PLUGIN_NAME "OLSRD protocol injection plugin"
+#define PLUGIN_NAME_SHORT "OLSRD PROTO"
 #define PLUGIN_VERSION "0.0.2 (" __DATE__ " " __TIME__ ")"
 #define PLUGIN_COPYRIGHT "  (C) Ninux.org"
 #define PLUGIN_AUTHOR "  Claudio Pisa (clauz@ninux.org)"
