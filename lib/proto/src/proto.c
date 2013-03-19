@@ -41,7 +41,7 @@
 
 #include "proto.h"
 
-int target_proto_no = 3;
+int target_proto_no = -1;
 int target_table_no = -1;
 int sock = -1;
 struct sockaddr_nl nladdr;
@@ -61,11 +61,11 @@ void parse_route_entry (struct  nlmsghdr *nlh)
 
 	route_entry = (struct rtmsg *) NLMSG_DATA(nlh);
 
-	if (route_entry->rtm_table != target_table_no)
+	if (target_table_no >= 0 && route_entry->rtm_table != target_table_no)
 		return;
 
 	route_protocol = route_entry->rtm_protocol;
-	if(route_protocol != target_proto_no)
+	if(target_proto_no >= 0 && route_protocol != target_proto_no)
 		return;
 
 	proto_hna4_netmask_length = route_entry->rtm_dst_len;
@@ -234,7 +234,7 @@ proto_inject_hnas (int fd __attribute__ ((unused)), void *data __attribute__ ((u
         if (target_table_no >= 0 && route_entry->rtm_table != target_table_no)
             continue;
 
-        if (route_entry->rtm_protocol != target_proto_no)
+        if (target_proto_no >= 0 && route_entry->rtm_protocol != target_proto_no)
             continue;
 
 		proto_hna4_netmask_length = (uint8_t)route_entry->rtm_dst_len;
